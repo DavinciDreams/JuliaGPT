@@ -1,3 +1,19 @@
+---
+language: en
+license: mit
+library_name: custom
+tags:
+  - gpt
+  - character-level
+  - transformer
+  - from-scratch
+  - ancient-scripts
+  - classical-texts
+datasets:
+  - custom
+pipeline_tag: text-generation
+---
+
 # JuliaGPT
 
 An optimized character-level GPT in Julia for training on ancient scripts and classical texts. Evolution of [MicroJulia](https://github.com/DavinciDreams/micro-julia).
