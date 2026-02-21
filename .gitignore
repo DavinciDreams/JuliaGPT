@@ -1,0 +1,6 @@
+*.txt
+checkpoints/
+*.jld2
+_wandb_log.py
+_build_notebooks.py
+.env
