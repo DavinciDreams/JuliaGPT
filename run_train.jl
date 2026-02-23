@@ -130,7 +130,6 @@ function gpt(token_id::Int, pos_id::Int,
     tok_emb = params.wte[token_id, :]
     pos_emb = params.wpe[pos_id, :]
     x = tok_emb .+ pos_emb
-    x = rmsnorm_ag(x)
 
     for li in 1:n_layer
         layer = params.layers[li]
@@ -387,8 +386,9 @@ end
 TRAINING_DATA = String[]
 for (_, (_, fn, _)) in sources
     isfile(fn) || continue
-    txt = lowercase(read(fn, String))
-    txt = replace(txt, r"[^a-z \.\n]" => " ")
+    txt = read(fn, String)
+    txt = replace(txt, r"[^a-zA-Z0-9 .,;:!?'\"\-\(\)\n]" => " ")
+    txt = lowercase(txt)
     txt = replace(txt, r"  +" => " ")
     for p in split(txt, r"\n\n+")
         cleaned = strip(replace(String(p), r"\n" => " "))
@@ -415,6 +415,7 @@ println("TRAINING_DATA: $(length(TRAINING_DATA)) paragraphs, $(sum(length, TRAIN
 # ═══════════════════════════════════════════════════════════════
 
 docs = copy(TRAINING_DATA)
+Random.shuffle!(docs)
 split_idx = max(1, Int(floor(0.9 * length(docs))))
 train_docs = docs[1:split_idx]
 val_docs = docs[split_idx+1:end]
